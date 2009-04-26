@@ -1,1 +1,10 @@
-Cython wrapper classes around a tokyo dystopia index
+Braindead simple api to a tokyo dystopia text index. See test.py for an example, or, for the impatient, use like this:
+
+import dystopia
+
+indexer = dystopia.Indexer("test.idx")
+indexer.add_doc(1, "some test document text")
+indexer.close()
+
+searcher = dystopia.Searcher("test.idx")
+print searcher.search("text") # => (1, "some test document text")

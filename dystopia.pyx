@@ -64,7 +64,11 @@ cdef class Indexer:
 		result = tcidbout(self.index, doc_id)
 
 	def get_doc(self, int64_t doc_id):
-		return tcidbget(self.index, doc_id)
+		cdef char *result = tcidbget(self.index, doc_id)
+
+		if result == NULL:
+			return None
+		return result
 
 	def optimize(self):
 		result = tcidboptimize(self.index)

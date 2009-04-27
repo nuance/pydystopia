@@ -30,6 +30,7 @@ cdef extern from "dystopia.h":
 	TCIDB *tcidbnew()
 
 	bool tcidbopen(TCIDB *idb, char *path, int omode)
+	bool tcidbclose(TCIDB *idb)
 	bool tcidbdel(TCIDB *idb)
 
 	bool tcidbput(TCIDB *idb, int64_t id, char *text)
@@ -74,7 +75,12 @@ cdef class Indexer:
 		result = tcidboptimize(self.index)
 
 	def close(self):
+		cdef bool result
 		if self.index != NULL:
+			result = tcidbclose(self.index)
+			if result == false:
+				raise Exception("Exception closing index opened for write: %s" % tcidberrmsg(tcidbecode(self.index)))
+
 			tcidbdel(self.index)
 		self.index = NULL
 
